@@ -7,6 +7,17 @@
   align-items: center;
 }
 
+.container nav {
+  padding: 10px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 375px;
+  justify-content: center;
+}
+.container nav a {
+  margin-top: 10px;
+}
+
 .main {
   width: 800px;
   padding: 10px 0;
