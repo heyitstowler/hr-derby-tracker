@@ -40,7 +40,7 @@ export default function Home({ hrs }) {
     }
   }, [sort.by, sort.asc])
 
-  const getSort = (by, asc = false) => () => setSort({ by, asc })
+  const { by, asc } = sort
 
   return (
     <div className={styles.container}>
@@ -53,15 +53,15 @@ export default function Home({ hrs }) {
         <header>
           <h1>Home Run Derby</h1>
         </header>
-        <section>
-          <button onClick={getSort('hrs')}>HRs (desc)</button>
-          <button onClick={getSort('hrs', true)}>HRs (asc)</button>
-          <button onClick={getSort('a-z')}>A - Z</button>
-          <button onClick={getSort('a-z', true)}>Z - A</button>
+        <section className={styles.buttons}>
+          <SortButton active={by === 'hrs' && !asc} sort={setSort} by="hrs" >HRs (desc)</SortButton>
+          <SortButton active={by === 'hrs' && asc} sort={setSort} by="hrs" asc>HRs (asc)</SortButton>
+          <SortButton active={by === 'a-z' && !asc} sort={setSort} by="a-z">A - Z</SortButton>
+          <SortButton active={by === 'a-z' && asc} sort={setSort} by="a-z" asc>Z - A</SortButton>
         </section>
-        <table>
-          <thead>
-            <tr>
+        <table className={styles.t}>
+          <thead className={styles.thead}>
+            <tr className={styles.tr}>
             <td>Name</td>
             <td>HR</td>
             </tr>
@@ -69,7 +69,7 @@ export default function Home({ hrs }) {
           <tbody>
             {
               hrList.map(([name, hrs]) => (
-                <tr key={name}>
+                <tr className={styles.tr} key={name}>
                   <td>{name}</td>
                   <td>{hrs}</td>
                 </tr>
@@ -83,6 +83,19 @@ export default function Home({ hrs }) {
         
       </footer>
     </div>
+  )
+}
+
+function SortButton({ children, sort, by, asc = false, active }) {
+const getSort = (by, asc = false) => () => sort({ by, asc })
+
+  return (
+    <button
+      className={`${styles['sort-button']} ${active ? styles.active : ''}`}
+      onClick={getSort(by, asc)}
+      >
+        {children}
+    </button>
   )
 }
 
