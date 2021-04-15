@@ -12,9 +12,7 @@ export default function Month({ hrs, month }) {
 }
 
 export const getServerSideProps = async ({ params: { month }}) => {
-  console.log(month)
   const hrs = await getHomeRunData(month)
-  console.log(hrs)
   return {
     props: {
       hrs,
