@@ -37,7 +37,7 @@ export default function TeamsLists({ teams, stats }) {
       </section>
       {
         list.map(([name, score]) => (
-          <Team name={name} score={score} roster={rosters[name]} />
+          <Team key={name} name={name} score={score} roster={rosters[name]} />
         ))
       }
     </section>
