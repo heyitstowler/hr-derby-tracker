@@ -1,29 +1,30 @@
-import { useMemo } from 'react'
 import Team from './Team'
 import {byHomeRuns, useSortable} from './useSortable'
 import styles from './SortableTable.module.css'
 import { SortButton } from './SortableTable'
 
+const format = (teams, stats) => {
+  const ts = Object.keys(teams)
+  const map = {}
+  const rosters = {}
+
+  ts.forEach(t => {
+    let total = 0
+    rosters[t] = []
+    teams[t].forEach(p => {
+      const pscore = parseInt(stats[p] || '0', 10)
+      rosters[t].push([p, pscore])
+
+      total += pscore
+    });
+    map[t] = total
+    rosters[t].sort(byHomeRuns)
+  })
+  return { teamScores: map, rosters }
+}
+
 export default function TeamsLists({ teams, stats }) {
-  const { teamScores, rosters } = useMemo(() => {
-    const ts = Object.keys(teams)
-    const map = {}
-    const rosters = {}
-
-    ts.forEach(t => {
-      let total = 0
-      rosters[t] = []
-      teams[t].forEach(p => {
-        const pscore = parseInt(stats[p] || '0', 10)
-        rosters[t].push([p, pscore])
-
-        total += pscore
-      });
-      map[t] = total
-      rosters[t].sort(byHomeRuns)
-    })
-    return { teamScores: map, rosters }
-  }, [])
+  const { teamScores, rosters } = format(teams, stats)
 
   const { list, by, asc, setSort } = useSortable(teamScores)
   return ( 

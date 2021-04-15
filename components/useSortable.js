@@ -1,14 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 export function useSortable(data) {
   const [sort, setSort] = useState({ by: 'hrs', asc: false})
-  const list = useMemo(() => {
-    if (sort.by === 'a-z') {
-      return toSortedList(data, { asc: sort.asc })
-    } else {
-      return toSortedList(data, { fn: byHomeRuns, asc: sort.asc })
-    }
-  }, [sort.by, sort.asc])
+  const list = sort.by === 'a-z'
+    ? toSortedList(data, { asc: sort.asc })
+    :toSortedList(data, { fn: byHomeRuns, asc: sort.asc })
 
   const { by, asc } = sort
 

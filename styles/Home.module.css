@@ -49,11 +49,16 @@
   align-items: center;
 }
 
-.title a,
+.container a,
 .mobile a {
   color: #0070f3;
   text-decoration: underline;
   margin: 0px 20px;
+}
+
+.container a {
+  text-decoration: none;
+  margin: 0px 10px;
 }
 
 .title a:hover,
