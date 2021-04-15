@@ -21,22 +21,26 @@ function byHomeRuns(a, b) {
   }
 }
 
-function toSortedList(data, sortingFn = alphabeticalSort) {
+function toSortedList(data, {fn = alphabeticalSort, asc = false}) {
   const list = Object.entries(data)
-  list.sort(sortingFn)
+  list.sort(
+    asc ? (a, b) => fn(b, a) : fn
+  )
   return list
 }
 
 export default function Home({ hrs }) {
 
-  const [sort, setSort] = useState('hrs')
+  const [sort, setSort] = useState({ by: 'hrs', asc: false})
   const hrList = useMemo(() => {
-    if (sort === 'a-z') {
-      return toSortedList(hrs)
+    if (sort.by === 'a-z') {
+      return toSortedList(hrs, { asc: sort.asc })
     } else {
-      return toSortedList(hrs, byHomeRuns)
+      return toSortedList(hrs, { fn: byHomeRuns, asc: sort.asc })
     }
-  }, [sort])
+  }, [sort.by, sort.asc])
+
+  const getSort = (by, asc = false) => () => setSort({ by, asc })
 
   return (
     <div className={styles.container}>
@@ -49,6 +53,12 @@ export default function Home({ hrs }) {
         <header>
           <h1>Home Run Derby</h1>
         </header>
+        <section>
+          <button onClick={getSort('hrs')}>HRs (desc)</button>
+          <button onClick={getSort('hrs', true)}>HRs (asc)</button>
+          <button onClick={getSort('a-z')}>A - Z</button>
+          <button onClick={getSort('a-z', true)}>Z - A</button>
+        </section>
         <table>
           <thead>
             <tr>
