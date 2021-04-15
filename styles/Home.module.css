@@ -9,12 +9,25 @@
 
 .main {
   width: 800px;
-  padding: 5rem 0;
+  padding: 10px 0;
   flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
+}
+@media (max-width: 800px) {
+  .main {
+    width: 320px;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.main h2 {
+  text-align: center;
 }
 
 .footer {
@@ -36,9 +49,11 @@
   align-items: center;
 }
 
-.title a {
+.title a,
+.mobile a {
   color: #0070f3;
-  text-decoration: none;
+  text-decoration: underline;
+  margin: 0px 20px;
 }
 
 .title a:hover,
@@ -120,4 +135,25 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .mobile {
+    display: unset;
+  }
+}
+
+.top {
+  position: fixed;
+  bottom: 30px;
+  right: 5px;
+}
+
+.top a {
+  text-decoration: none;
+  font-size: 36px;
 }

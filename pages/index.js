@@ -26,20 +26,27 @@ export default function Home({ hrs }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
+      <header id="top">
         <h1>Home Run Derby</h1>
       </header>
       <main className={styles.main}>
-        <section>
-          <h2>Player Stats</h2>
-          <SortableTable headings={['Player', 'HRs']} data={hrs} />
+        <section className={styles.mobile}>
+          <a href="#standings">Standings</a>
+          <a href="#player-stats">Player Stats</a>
         </section>
-        <section>
+        <section id="standings">
           <h2>Standings</h2>
           <TeamsLists teams={TEAMS} stats={hrs} />
         </section>
-        
+        <section id="player-stats">
+          <h2>Player Stats</h2>
+          <SortableTable headings={['Player', 'HRs']} data={hrs} />
+        </section>
       </main>
+
+      <div className={`${styles.mobile} ${styles.top}`}>
+        <a href="#top">🔝</a>
+      </div>
 
       <footer className={styles.footer}>
         
