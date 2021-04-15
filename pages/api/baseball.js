@@ -11,8 +11,6 @@ export async function getHomeRunData() {
   )
   const playerRows = rows.filter(row => {
     const name = row[1]?.children?.[0]?.children?.[0]?.data
-    // console.log(name)
-    // const name = row[0]?.[1]?.children?.[0]?.children?.[0]?.data
     return PLAYERS.includes(name)
   })
   const data = playerRows.map(row => {
@@ -29,7 +27,6 @@ export async function getHomeRunData() {
       map[p] = 0
     }
   })
-  console.log(playerRows.length)
   return map
 }
 

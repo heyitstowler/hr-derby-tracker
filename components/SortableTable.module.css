@@ -1,0 +1,20 @@
+.buttons {
+  padding: 20px 0;
+  width: 320px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.sort-button {
+  appearance: none;
+  padding: 2px 3px;
+  background-color: white;
+  border-radius: 3px;
+  border: 3px solid black;
+}
+
+.sort-button.active {
+  font-weight: bold;
+  background-color: lightblue;
+}
