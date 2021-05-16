@@ -22,11 +22,11 @@ const max = {
   october: 3,
 }
 
-const fmt = (s = '', e = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=1000&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1000`
+const fmt = (s = '', e = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=1000&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
 
 const getUrl = month => {
   if (!month) {
-    return 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=0&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1000'
+    return 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=0&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500'
   }
 
   const int = ints[month]
