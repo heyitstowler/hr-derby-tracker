@@ -33,7 +33,7 @@ const getUrl = month => {
   const endOfMonth = max[month]
 
   const startDate = `2021-0${int}-01`
-  const endDate = `2021-0${int >= 9 ? 10 : int}-${int >= 9 ? '03' : endOfMonth }`
+  const endDate = `2021-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '03' : endOfMonth }`
   const url = fmt(startDate, endDate)
   return url
 }
