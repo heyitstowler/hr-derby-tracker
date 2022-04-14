@@ -87,7 +87,6 @@ export default [
   "Randal Grichuk",
   "Randy Arozarena",
   "Rhys Hoskins",
-  "Ronald Acuna Jr",
   "Ronald Acuna Jr.",
   "Rougned Odor",
   "Rowdy Tellez",

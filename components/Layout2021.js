@@ -14,7 +14,7 @@ export default function Layout({ children, title = 'Home Run Derby' }) {
         <h1>{title}</h1>
         <YearsLinks />
       </header>
-      <StaticMonthList />
+      <StaticMonthList year={2021} />
       <main className={styles.main}>
         {children}
       </main>
