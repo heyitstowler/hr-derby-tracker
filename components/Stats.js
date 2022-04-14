@@ -1,9 +1,8 @@
 import SortableTable from './SortableTable';
 import TeamsLists from './TeamsLists';
-import TEAMS from '../constants/teams';
 import styles from '../styles/Home.module.css'
 
-export default function Stats({ hrs }) {
+export default function Stats({ hrs, teams }) {
   return (
     <>
       <section className={styles.mobile}>
@@ -12,7 +11,7 @@ export default function Stats({ hrs }) {
       </section>
       <section id="standings">
         <h2>Standings</h2>
-        <TeamsLists teams={TEAMS} stats={hrs} />
+        <TeamsLists teams={teams} stats={hrs} />
       </section>
       <section id="player-stats">
         <h2>Player Stats</h2>

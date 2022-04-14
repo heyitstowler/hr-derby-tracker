@@ -24,22 +24,29 @@ const max = {
 
 const fmt = (s = '', e = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=1000&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
 
-const getUrl = month => {
+const getEndDate = ({ year, monthInt }) => {
+  if (year === 2021) {
+    return `${year}-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '03' : endOfMonth }`
+  }
+  return `${year}-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '04' : endOfMonth }`
+}
+
+const getUrl = ({ month, year }) => {
   if (!month) {
-    return 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=0&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500'
+    return `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
   }
 
   const int = ints[month]
   const endOfMonth = max[month]
 
-  const startDate = `2021-0${int}-01`
-  const endDate = `2021-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '03' : endOfMonth }`
+  const startDate = `${year}-0${int}-01`
+  const endDate = getEndDate({ year, monthInt: int })
   const url = fmt(startDate, endDate)
   return url
 }
 
-export async function getHomeRunData(month) {
-  const url = getUrl(month)
+export async function getHomeRunData({ month, year }) {
+  const url = getUrl({ month, year })
   const html = await fetch(url)
     .then(r => r.text())
   const rows = Array.from($('.rgMasterTable tbody tr', html)).map(
@@ -71,6 +78,6 @@ export async function getHomeRunData(month) {
 }
 
 export default async function handler(req, res) {
-  const data = await getHomeRunData(req.query.month)
+  const data = await getHomeRunData({ month: req.query.month, year: month.query.year })
   res.json(data)
 }

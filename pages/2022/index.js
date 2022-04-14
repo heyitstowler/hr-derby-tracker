@@ -1,19 +1,19 @@
 
-import Layout2021 from '../../components/Layout2021';
+import Layout from '../../components/Layout';
 import Stats from '../../components/Stats';
 import { getHomeRunData } from '../api/baseball'
-import TEAMS from '../../constants/teams';
+import TEAMS from '../../constants/teams-2022';
 
 export default function Home({ hrs }) {
   return (
-    <Layout2021>
-      <Stats hrs={hrs} teams={TEAMS} />
-    </Layout2021>
+    <Layout>
+      <Stats hrs={hrs} teams={TEAMS}/>
+    </Layout>
   )
 }
 
 export const getServerSideProps = async () => {
-  const hrs = await getHomeRunData({ year: 2021 })
+  const hrs = await getHomeRunData({ year: 2022 })
   return {
     props: {
       hrs

@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import MonthList from './MonthList'
+import YearsLinks from './YearsLinks'
 
 export default function Layout({ children, title = 'Home Run Derby' }) {
   return (
@@ -11,6 +12,7 @@ export default function Layout({ children, title = 'Home Run Derby' }) {
       </Head>
       <header id="top">
         <h1>{title}</h1>
+        <YearsLinks />
       </header>
       <MonthList />
       <main className={styles.main}>

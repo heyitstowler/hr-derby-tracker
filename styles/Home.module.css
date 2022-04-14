@@ -181,3 +181,11 @@
   width: 100%;
   margin: 0;
 }
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: auto;
+  max-width: 300px;
+}
