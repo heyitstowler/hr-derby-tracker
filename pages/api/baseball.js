@@ -26,9 +26,9 @@ const fmt = (s = '', e = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&
 
 const getEndDate = ({ year, monthInt }) => {
   if (year === 2021) {
-    return `${year}-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '03' : endOfMonth }`
+    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '03' : endOfMonth }`
   }
-  return `${year}-${int >= 9 ? 10 : '0' + int}-${int >= 9 ? '04' : endOfMonth }`
+  return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '04' : endOfMonth }`
 }
 
 const getUrl = ({ month, year }) => {
