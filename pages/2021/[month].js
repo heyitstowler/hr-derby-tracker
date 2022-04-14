@@ -1,7 +1,7 @@
 
-import Layout2021 from '../components/Layout2021';
-import Stats from '../components/Stats';
-import { getHomeRunData } from './api/baseball'
+import Layout2021 from '../../components/Layout2021';
+import Stats from '../../components/Stats';
+import { getHomeRunData } from '../api/baseball'
 import TEAMS from '../../constants/teams';
 
 export default function Month({ hrs, month }) {
