@@ -23,13 +23,13 @@ export function alphabeticalSort(a, b) {
 }
 
 export function byHomeRuns(_a, _b) {
-  const a = Number(_a)
-  const b = Number(_b)
-  if (a[1] === b[1]) {
+  const a = Number(_a[1])
+  const b = Number(_b[1])
+  if (a === b) {
     return 0;
   }
   else {
-      return (a[1] > b[1]) ? -1 : 1;
+      return (a > b) ? -1 : 1;
   }
 }
 
