@@ -22,7 +22,9 @@ export function alphabeticalSort(a, b) {
   }
 }
 
-export function byHomeRuns(a, b) {
+export function byHomeRuns(_a, _b) {
+  const a = Number(_a)
+  const b = Number(_b)
   if (a[1] === b[1]) {
     return 0;
   }
