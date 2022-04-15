@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function MonthList() {
+export default function MonthList({ year }) {
   const months = [
     'April',
     'May',
