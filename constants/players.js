@@ -1,5 +1,5 @@
 export default [
-  "AJ Pollock",
+  "A.J. Pollock",
   "Aaron Hicks",
   "Aaron Judge",
   "Adalberto Mondesi",
@@ -36,7 +36,6 @@ export default [
   "Evan Longoria",
   "Fernando Tatis Jr.",
   "Francisco Lindor",
-  "Franciso Lindor",
   "Franmil Reyes",
   "Freddie Freeman",
   "Gary Sanchez",
