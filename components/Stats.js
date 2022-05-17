@@ -1,8 +1,9 @@
 import SortableTable from './SortableTable';
 import TeamsLists from './TeamsLists';
+import OptimalTeam from './OptimalTeam';
 import styles from '../styles/Home.module.css'
 
-export default function Stats({ hrs, teams }) {
+export default function Stats({ hrs, teams, optimal }) {
   return (
     <>
       <section className={styles.mobile}>
@@ -11,6 +12,7 @@ export default function Stats({ hrs, teams }) {
       </section>
       <section id="standings">
         <h2>Standings</h2>
+        { optimal && <OptimalTeam optimal={optimal} />}
         <TeamsLists teams={teams} stats={hrs} />
       </section>
       <section id="player-stats">
