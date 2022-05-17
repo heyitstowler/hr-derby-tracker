@@ -6,6 +6,7 @@
 //     else: K(w, j) = max{K(w, j − 1), K(w − wj, j − 1) + vj}
 // return K(W, n)
 
+import { byHomeRuns } from "../../components/useSortable"
 import playersWithCosts from "../../constants/playersWithCosts"
 import { getHomeRunData } from "./baseball"
 
@@ -34,7 +35,6 @@ function knapsack({ budget, players }) {
     costs.push(player.cost)
     values.push(player.currentHRs)
   })
-  console.log({ costs, values })
   const maxPlayers = 7
 
   // initialize table
@@ -45,81 +45,74 @@ function knapsack({ budget, players }) {
     }
   }
 
+  // Filling the table
   for (let n = 1; n <= players.length ; n++) {
     for (let w = 1; w < costs.length; w++) {
       for (let p = 1; p <= maxPlayers; p++) {
+        // If we can afford the player, decide if it's worth it
         if (w >= costs[n]) {
           const includedVal = K[n - 1][w - costs[n]][p - 1] + values[n]
           const skippedVal = K[n - 1][w][p]
           K[n][w][p] = Math.max(includedVal, skippedVal)
         } else {
+        // can't afford this player, so skip
           K[n][w][p] = K[n - 1][w][p]
         }
-        // if (costs[n] > w) {
-        //   K[n][w][p] = K[n - 1][w][p]
-        // } else {
-        //   const includedVal = K[n - 1][w - costs[n]][p - 1] + values[n]
-        //   const skippedVal = K[n - 1][w][p]
-        //   K[n][w][p] = Math.max(includedVal, skippedVal)
-        // }
       }
     }
   }
 
   const maxHRs = K[players.length][budget][maxPlayers]
-  console.log({ maxHRs })
+
   // lookback
 
+  // structuring response object to match frontend props format
   const optimal = {
     roster: [],
     score: 0,
-  } 
+  }
+
   let totalCost = 0
+
+  // Start with our indices initilized at the values that point to our solution
   let k = maxPlayers
   let j = budget
   let i = players.length - 1
+
+  // Loop runs until we have bavkfilled the entire team
   while (optimal.roster.length < maxPlayers) {
+    // see what our current total is
     let currentTotal = K[i][j][k]
+    // keep backtracking the player index until our value changes: 
+    // this means that we picked the previous player
     while (currentTotal === K[i][j][k]) {
       i = i - 1
     }
+    // our previous player is the index right before this
     const prevPlayerIdx = i + 1
+
+    // -1 to acount for the 0/1 indexing mismatch
     const player = players[prevPlayerIdx - 1]
-    console.log({ name: player.Name, cost: player.cost })
-    totalCost += player.cost
     optimal.roster.push([player.Name, player.currentHRs])
+    // decrement our cost index by the players cost, decrement the roster index by 1
     j -= player.cost
     k -= 1
+
+    totalCost += player.cost
   }
+
+  // bookkeeping: 
+  // - compute the score and verifying it matches our computed max score earlier
   optimal.score = optimal.roster.reduce((sum, p) => {
     return sum + p[1]
   }, optimal.score)
-  console.log({ maxScore: optimal.score, totalCost, roster: optimal.roster })
+
+  // Throw an error if we messed up and dont match the conditions
+  if (optimal.score !== maxHRs) throw 'Score doesn\'t match!'
+  if (totalCost > budget) throw 'Total cost exceeds budget!'
+
+  optimal.roster = optimal.roster.sort(byHomeRuns)
   return optimal
-
-  
-  // costs.forEach((_, w) => {
-  //   row = []
-  //   values.forEach((_, j) => {
-  //     const val = j === 0 || w === 0 ? 0 : null
-  //     row.push(val)
-  //   })
-  //   K.push(row)
-  // })
-
-  // for (let j = 1; j < values.length; j++) {
-  //   for (let w = 1; w < costs.length; w++) {
-  //     if (costs[j] > w) {
-  //       K[w][j] = K[w][j - 1]
-  //     } else {
-  //       const includedVal = K[w - costs[j]][j - 1] + values[j]
-  //       const skippedVal = K[w][j - 1]
-  //       K[w][j] = Math.max(includedVal, skippedVal)
-  //     }
-  //   }
-  // }
-
-
 }
 
 export default async function handler(req, res) {
