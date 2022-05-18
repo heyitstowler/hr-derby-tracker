@@ -40,23 +40,23 @@ function knapsack({ budget, players }) {
   // initialize table
   const K = Array.from(Array(players.length + 1), () => Array(players.length + 1))
   for (let n = 0; n <= players.length; n++) {
-    for (let w = 0; w < costs.length; w++) {
-      K[n][w] = new Array(maxPlayers + 1).fill(0);
+    for (let b = 0; b < costs.length; b++) {
+      K[n][b] = new Array(maxPlayers + 1).fill(0);
     }
   }
 
   // Filling the table
   for (let n = 1; n <= players.length ; n++) {
-    for (let w = 1; w < costs.length; w++) {
+    for (let b = 1; b < costs.length; b++) {
       for (let p = 1; p <= maxPlayers; p++) {
         // If we can afford the player, decide if it's worth it
-        if (w >= costs[n]) {
-          const includedVal = K[n - 1][w - costs[n]][p - 1] + values[n]
-          const skippedVal = K[n - 1][w][p]
-          K[n][w][p] = Math.max(includedVal, skippedVal)
+        if (b >= costs[n]) {
+          const includedVal = K[n - 1][b - costs[n]][p - 1] + values[n]
+          const skippedVal = K[n - 1][b][p]
+          K[n][b][p] = Math.max(includedVal, skippedVal)
         } else {
         // can't afford this player, so skip
-          K[n][w][p] = K[n - 1][w][p]
+          K[n][b][p] = K[n - 1][b][p]
         }
       }
     }
@@ -75,28 +75,28 @@ function knapsack({ budget, players }) {
   let totalCost = 0
 
   // Start with our indices initilized at the values that point to our solution
-  let k = maxPlayers
-  let j = budget
-  let i = players.length - 1
+  let p = maxPlayers
+  let b = budget
+  let n = players.length - 1
 
   // Loop runs until we have bavkfilled the entire team
   while (optimal.roster.length < maxPlayers) {
     // see what our current total is
-    let currentTotal = K[i][j][k]
+    let currentTotal = K[n][b][p]
     // keep backtracking the player index until our value changes: 
     // this means that we picked the previous player
-    while (currentTotal === K[i][j][k]) {
-      i = i - 1
+    while (currentTotal === K[n][b][p]) {
+      n = n - 1
     }
     // our previous player is the index right before this
-    const prevPlayerIdx = i + 1
+    const prevPlayerIdx = n + 1
 
     // -1 to acount for the 0/1 indexing mismatch
     const player = players[prevPlayerIdx - 1]
     optimal.roster.push([player.Name, player.currentHRs])
     // decrement our cost index by the players cost, decrement the roster index by 1
-    j -= player.cost
-    k -= 1
+    b -= player.cost
+    p -= 1
 
     totalCost += player.cost
   }
