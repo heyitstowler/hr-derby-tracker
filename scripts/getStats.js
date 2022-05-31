@@ -1,7 +1,5 @@
-import $ from 'cheerio'
-
-import PLAYERS from '../../constants/players'
-
+const $ = require('cheerio').default
+console.log({ $ })
 const ints = {
   april: 4,
   may: 5,
@@ -45,9 +43,9 @@ const getUrl = ({ month, year }) => {
   return url
 }
 
-export async function getHomeRunData({ month, year, players = PLAYERS }) {
-  const url = getUrl({ month, year })
-  const html = await fetch(url, { headers: { mode: 'no-cors' }})
+async function getHomeRunData({ players, year }) {
+  const url = getUrl({ year })
+  const html = await fetch(url)
     .then(r => r.text())
   const rows = Array.from($('.rgMasterTable tbody tr', html)).map(
     row => row.children.filter(el => el && el.name === 'td')
@@ -77,7 +75,6 @@ export async function getHomeRunData({ month, year, players = PLAYERS }) {
   return map
 }
 
-export default async function handler(req, res) {
-  const data = await getHomeRunData({ month: req.query.month, year: month.query.year, })
-  res.json(data)
+module.exports = function(players) {
+  return getHomeRunData({ players, year: '2021'})
 }
