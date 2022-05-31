@@ -5,9 +5,10 @@ function getMonths() {
   const currentMonth = (new Date()).getMonth()
   const months = []
   for (let i = 3; i <= currentMonth && i <= 9; i++) {
-    const date = new Date()
+    // wierd timezone shenanigans
+    const date = new Date('12/5/2022')
     date.setMonth(i)
-    months.push(date.toLocaleString('default', { month: 'long' }))
+    months.push(date.toLocaleString('en-US', { month: 'long' }))
   }
   return months
 }
