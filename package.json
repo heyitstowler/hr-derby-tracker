@@ -5,14 +5,23 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prisma:init": "dotenv -e .env.local prisma migrate dev --name initial-migration --create-only",
+    "prisma:format": "dotenv -e .env.local prisma format",
+    "prisma:migrate": "dotenv -e .env.local prisma migrate dev"
   },
   "dependencies": {
+    "@prisma/client": "4.11.0",
     "cheerio": "^1.0.0-rc.6",
     "eslint-config-next": "^13.2.4",
     "next": "^13.2.4",
     "puppeteer": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.29",
+    "prisma": "^4.11.0",
+    "typescript": "5.0.2"
   }
 }
