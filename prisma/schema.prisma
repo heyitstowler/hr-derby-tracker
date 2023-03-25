@@ -25,6 +25,7 @@ model Player {
   firstName String
   lastName  String
   suffix    String?
+  mlbTeam   String?
   Team      Team?   @relation(fields: [teamId], references: [id])
   teamId    Int?
 }
