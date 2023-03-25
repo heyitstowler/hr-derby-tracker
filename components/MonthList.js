@@ -17,12 +17,12 @@ export default function MonthList({ year }) {
   const months = useMemo(getMonths, [])
   return (
     <nav>
-      <Link href="/">
+      <Link href="/" legacyBehavior>
         <a>Full Season</a>
       </Link>
       {
         months.map(month => (
-          <Link key={month} href={`/${year}/${month.toLowerCase()}`}>
+          <Link legacyBehavior key={month} href={`/${year}/${month.toLowerCase()}`}>
             <a>{month}</a>
           </Link>
         ))
