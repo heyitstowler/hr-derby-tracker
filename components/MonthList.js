@@ -6,7 +6,7 @@ function getMonths() {
   const months = []
   for (let i = 3; i <= currentMonth && i <= 9; i++) {
     // wierd timezone shenanigans
-    const date = new Date('12/5/2022')
+    const date = new Date('12/5/2023')
     date.setMonth(i)
     months.push(date.toLocaleString('en-US', { month: 'long' }))
   }
