@@ -12,12 +12,22 @@ export default function Month({ hrs, month }) {
   )
 }
 
-export const getServerSideProps = async ({ params: { month }}) => {
+export const getStaticProps = async ({ params: { month }}) => {
   const hrs = await getHomeRunData({ month, year: 2021 })
   return {
     props: {
       hrs,
       month: month[0].toUpperCase() + month.slice(1)
     }
+  }
+}
+
+const months = ['march', 'april', 'may', 'june', 'july', 'august', 'september']
+
+export const getStaticPaths = async () => {
+  return {
+    paths: months.map(month => ({
+      params: { month }
+    }))
   }
 }

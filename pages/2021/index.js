@@ -12,7 +12,7 @@ export default function Home({ hrs }) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const hrs = await getHomeRunData({ year: 2021 })
   return {
     props: {

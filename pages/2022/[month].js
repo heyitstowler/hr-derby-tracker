@@ -13,7 +13,7 @@ export default function Month({ hrs, month, optimal }) {
   )
 }
 
-export const getServerSideProps = async ({ params: { month }}) => {
+export const getStaticProps = async ({ params: { month }}) => {
   const hrs = await getHomeRunData({ month, year: 2022 })
   const optimal = await fetchOptimalTeam({ month, year: 2022 })
   return {
@@ -22,5 +22,15 @@ export const getServerSideProps = async ({ params: { month }}) => {
       month: month[0].toUpperCase() + month.slice(1),
       optimal,
     }
+  }
+}
+
+const months = ['march', 'april', 'may', 'june', 'july', 'august', 'september']
+
+export const getStaticPaths = async () => {
+  return {
+    paths: months.map(month => ({
+      params: { month }
+    }))
   }
 }

@@ -13,7 +13,7 @@ export default function Home({ hrs, optimal }) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const hrs = await getHomeRunData({ year: 2022 })
   const optimal = await fetchOptimalTeam({ year: 2022 })
 
