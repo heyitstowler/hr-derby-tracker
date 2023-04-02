@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       hrs,
-      optimal
+      optimal: optimal.error ? null : optimal
     }
   }
 }

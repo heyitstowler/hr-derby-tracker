@@ -50,7 +50,8 @@ const getUrl = ({ month, year }) => {
   return url
 }
 
-export async function getHomeRunData({ month, year, players = PLAYERS }) {
+export async function getHomeRunData({ month, year, players: override }) {
+  const players = override || PLAYERS[year] || PLAYERS.default
   const url = getUrl({ month, year })
   const html = await fetch(url, { headers: { mode: 'no-cors' }})
     .then(r => r.text())
