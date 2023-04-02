@@ -34,7 +34,7 @@ export async function fetchOptimalTeam({ month, year }) {
     return optimal
   }
   catch (e) {
-    return { error: e }
+    return { error: e.toString() }
   }
 }
 
@@ -129,12 +129,12 @@ function knapsack({ budget, players }) {
 export default async function handler(req, res) {
   try {
     const hrData = await fetchOptimalTeam({ month: req.query.month, year: month.query.year }).catch(e => {
-      res.json({ error: e })
+      res.json({ error: e.toString() })
     })
   
     res.json(data)
   }
   catch (e) {
-    res.json({ error: e })
+    res.json({ error: e.toString() })
   }
 }

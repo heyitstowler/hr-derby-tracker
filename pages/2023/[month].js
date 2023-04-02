@@ -27,10 +27,19 @@ export const getStaticProps = async ({ params: { month }}) => {
 }
 
 const months = ['april', 'may', 'june', 'july', 'august', 'september']
+const first = (arr, num) => {
+  const results = []
+  while (results.length < arr.length && results.length < num) {
+    results.push(arr[results.length])
+  }
+  return results
+}
 
 export const getStaticPaths = async () => {
+  const month = new Date().getMonth()
+  const currentMonth = month > 8 ? 5 : month - 2
   return {
-    paths: months.map(month => ({
+    paths: first(months, currentMonth).map(month => ({
       params: { month }
     })),
     fallback: false,
