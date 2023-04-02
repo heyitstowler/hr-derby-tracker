@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import MonthList from './MonthList'
+import StaticMonthList from './StaticMonthList'
 import YearsLinks from './YearsLinks'
+import MonthList from './MonthList'
 
-export default function Layout({ children, title = 'Home Run Derby' }) {
+export default function Layout({ children, year, title = 'Home Run Derby' }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +15,11 @@ export default function Layout({ children, title = 'Home Run Derby' }) {
         <h1>{title}</h1>
         <YearsLinks />
       </header>
-      <MonthList year={2022}/>
+      {
+        year === 2023
+        ? <MonthList year={year}/>
+        : <StaticMonthList year={year}/>
+      }
       <main className={styles.main}>
         {children}
       </main>

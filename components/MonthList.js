@@ -6,7 +6,7 @@ function getMonths() {
   const months = []
   for (let i = 3; i <= currentMonth && i <= 9; i++) {
     // wierd timezone shenanigans
-    const date = new Date('12/5/2022')
+    const date = new Date('12/5/2023')
     date.setMonth(i)
     months.push(date.toLocaleString('en-US', { month: 'long' }))
   }
@@ -17,12 +17,12 @@ export default function MonthList({ year }) {
   const months = useMemo(getMonths, [])
   return (
     <nav>
-      <Link href="/">
+      <Link href="/" legacyBehavior>
         <a>Full Season</a>
       </Link>
       {
         months.map(month => (
-          <Link key={month} href={`/${year}/${month.toLowerCase()}`}>
+          <Link legacyBehavior key={month} href={`/${year}/${month.toLowerCase()}`}>
             <a>{month}</a>
           </Link>
         ))

@@ -7,12 +7,17 @@
 // return K(W, n)
 
 import { byHomeRuns } from "../../components/useSortable"
-import playersWithCosts from "../../constants/playersWithCosts"
+import playersWithCosts2022 from "../../constants/playersWithCosts"
+import playersWithCosts2023 from "../../constants/playersWithCosts2023"
 import { getHomeRunData } from "./baseball"
 
 async function fetchAllPlayerData({ month, year }) {
+  const playersWithCosts = year === 2023
+    ? playersWithCosts2023
+    : playersWithCosts2022
   const players = playersWithCosts.map((p) => p.Name)
   const hrData = await getHomeRunData({ month, year, players })
+
   const playersData = playersWithCosts.map(({ Name, cost }) => ({
     Name,
     cost: Number(cost),
@@ -22,9 +27,15 @@ async function fetchAllPlayerData({ month, year }) {
 }
 
 export async function fetchOptimalTeam({ month, year }) {
+  const budget = year === 2023 ? 153 : 161
   const players = await fetchAllPlayerData({ month, year })
-  const optimal = knapsack({ players, budget: 161 })
-  return optimal
+  try {
+    const optimal = knapsack({ players, budget })
+    return optimal
+  }
+  catch (e) {
+    return { error: e.toString() }
+  }
 }
 
 function knapsack({ budget, players }) {
@@ -116,7 +127,14 @@ function knapsack({ budget, players }) {
 }
 
 export default async function handler(req, res) {
-  const hrData = await fetchOptimalTeam({ month: req.query.month, year: month.query.year })
-
-  res.json(data)
+  try {
+    const hrData = await fetchOptimalTeam({ month: req.query.month, year: month.query.year }).catch(e => {
+      res.json({ error: e.toString() })
+    })
+  
+    res.json(data)
+  }
+  catch (e) {
+    res.json({ error: e.toString() })
+  }
 }
