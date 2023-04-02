@@ -22,12 +22,13 @@ export const getStaticProps = async ({ params: { month }}) => {
   }
 }
 
-const months = ['march', 'april', 'may', 'june', 'july', 'august', 'september']
+const months = ['april', 'may', 'june', 'july', 'august', 'september']
 
 export const getStaticPaths = async () => {
   return {
     paths: months.map(month => ({
       params: { month }
-    }))
+    })),
+    fallback: false,
   }
 }

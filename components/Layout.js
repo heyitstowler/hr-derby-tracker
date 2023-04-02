@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import MonthList from './MonthList'
+import MonthList from './StaticMonthList'
 import YearsLinks from './YearsLinks'
 
 export default function Layout({ children, title = 'Home Run Derby' }) {
