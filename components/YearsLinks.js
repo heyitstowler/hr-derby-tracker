@@ -6,7 +6,7 @@ export default () => (
     <Link legacyBehavior href="/2021">
       <a>2021</a>
     </Link>
-    <Link legacyBehavior href="/">
+    <Link legacyBehavior href="/2022">
       <a>2022</a>
     </Link>
   </div>
