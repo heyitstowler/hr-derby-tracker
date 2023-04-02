@@ -11,7 +11,7 @@ export default function MonthList({ year }) {
   ]
   return (
     <nav>
-      <Link legacyBehavior href="/2021">
+      <Link legacyBehavior href={`/${year}`}>
         <a>Full Season</a>
       </Link>
       {
