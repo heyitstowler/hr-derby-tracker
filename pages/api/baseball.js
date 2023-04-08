@@ -45,6 +45,7 @@ const getUrl = ({ month, year }) => {
   const startDate = year === 2023 && int === 4
     ? `${year}-03-30`
     : `${year}-0${int}-01`
+  console.log({startDate, month, year, int})
   const endDate = getEndDate({ year, monthInt: int, endOfMonth })
   const url = fmt(startDate, endDate, year)
   return url
