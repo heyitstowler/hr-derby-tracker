@@ -22,7 +22,7 @@ const max = {
   october: 3,
 }
 
-const fmt = (s = '', e = '', y = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${y}&month=1000&season1=${y}&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
+const fmt = (s = '', e = '', y = '') => `https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${y}&month=1000&season1=${y}&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
 
 const getEndDate = ({ year = 2021, monthInt, endOfMonth }) => {
   if (year === 2021) {
@@ -37,7 +37,7 @@ const getEndDate = ({ year = 2021, monthInt, endOfMonth }) => {
 
 const getUrl = ({ month, year }) => {
   if (!month) {
-    return `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
+    return `https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
   }
 
   const int = ints[month]
