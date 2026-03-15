@@ -2,8 +2,16 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import StaticMonthList from './StaticMonthList'
 import YearsLinks from './YearsLinks'
+import MonthList from './MonthList'
+import { type ReactNode } from 'react'
 
-export default function Layout({ children, title = 'Home Run Derby' }) {
+interface LayoutProps {
+  children: ReactNode
+  year: number
+  title?: string
+}
+
+export default function Layout({ children, year, title = 'Home Run Derby' }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +22,11 @@ export default function Layout({ children, title = 'Home Run Derby' }) {
         <h1>{title}</h1>
         <YearsLinks />
       </header>
-      <StaticMonthList year={2021} />
+      {
+        year === 2023
+        ? <MonthList year={year}/>
+        : <StaticMonthList year={year}/>
+      }
       <main className={styles.main}>
         {children}
       </main>

@@ -1,8 +1,15 @@
 import { useState } from 'react'
 import Table from './Table'
 import styles from './Team.module.css'
+import type { RosterEntry } from '../types'
 
-export default function Team({ name, score, roster }) {
+interface TeamProps {
+  name: string
+  score: number
+  roster: RosterEntry[]
+}
+
+export default function Team({ name, score, roster }: TeamProps) {
   const [expanded, setExpanded] = useState(false)
   return (
     <div className={styles.team} onClick={() => setExpanded(expanded => !expanded)}>

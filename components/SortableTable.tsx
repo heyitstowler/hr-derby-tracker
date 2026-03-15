@@ -1,8 +1,23 @@
+import { type ReactNode, type Dispatch, type SetStateAction } from 'react'
 import { useSortable } from './useSortable'
 import styles from './SortableTable.module.css'
-import Table from './Table';
+import Table from './Table'
 
-export default function SortableTable({ className = '', headings, data }) {
+interface SortableTableProps {
+  className?: string
+  headings: string[]
+  data: Record<string, string | number>
+}
+
+interface SortButtonProps {
+  children: ReactNode
+  sort: Dispatch<SetStateAction<{ by: string; asc: boolean }>>
+  by: string
+  asc?: boolean
+  active: boolean
+}
+
+export default function SortableTable({ className = '', headings, data }: SortableTableProps) {
   const { list: hrList, by, asc, setSort } = useSortable(data)
   return (
     <section className={className}>
@@ -20,9 +35,8 @@ export default function SortableTable({ className = '', headings, data }) {
   )
 }
 
-
-export function SortButton({ children, sort, by, asc = false, active }) {
-  const getSort = (by, asc = false) => () => sort({ by, asc })
+export function SortButton({ children, sort, by, asc = false, active }: SortButtonProps) {
+  const getSort = (by: string, asc = false) => () => sort({ by, asc })
 
   return (
     <button

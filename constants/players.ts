@@ -1,4 +1,4 @@
-export default {
+const PLAYERS: Record<string | number, string[]> = {
   default: [
     "A.J. Pollock",
     "Aaron Hicks",
@@ -313,3 +313,5 @@ export default {
     "Nelson Cruz"
   ]
 }
+
+export default PLAYERS

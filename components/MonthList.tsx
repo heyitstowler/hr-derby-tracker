@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
 
-function getMonths() {
+function getMonths(): string[] {
   const currentMonth = (new Date()).getMonth()
-  const months = []
+  const months: string[] = []
   for (let i = 3; i <= currentMonth && i <= 9; i++) {
-    // wierd timezone shenanigans
+    // weird timezone shenanigans
     const date = new Date('12/5/2023')
     date.setMonth(i)
     months.push(date.toLocaleString('en-US', { month: 'long' }))
@@ -13,7 +13,11 @@ function getMonths() {
   return months
 }
 
-export default function MonthList({ year }) {
+interface MonthListProps {
+  year: number
+}
+
+export default function MonthList({ year }: MonthListProps) {
   const months = useMemo(getMonths, [])
   return (
     <nav>

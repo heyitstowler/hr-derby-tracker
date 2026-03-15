@@ -230,4 +230,4 @@ export default [
       }
       accum[captain].push(player)
       return accum
-}, {})
+}, {} as Record<string, string[]>)

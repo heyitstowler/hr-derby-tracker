@@ -1,9 +1,16 @@
-import SortableTable from './SortableTable';
-import TeamsLists from './TeamsLists';
-import OptimalTeam from './OptimalTeam';
+import SortableTable from './SortableTable'
+import TeamsLists from './TeamsLists'
+import OptimalTeam from './OptimalTeam'
 import styles from '../styles/Home.module.css'
+import type { HRData, OptimalTeam as OptimalTeamData, Teams } from '../types'
 
-export default function Stats({ hrs, teams, optimal }) {
+interface StatsProps {
+  hrs: HRData
+  teams: Teams
+  optimal?: OptimalTeamData | null
+}
+
+export default function Stats({ hrs, teams, optimal }: StatsProps) {
   return (
     <>
       <section className={styles.mobile}>

@@ -1,7 +1,12 @@
-import React from 'react'
 import styles from './Table.module.css'
 
-export default function Table({ headings, data, expanded = true }) {
+interface TableProps {
+  headings: (string | number)[]
+  data: (string | number)[][]
+  expanded?: boolean
+}
+
+export default function Table({ headings, data, expanded = true }: TableProps) {
   return (
     <table className={styles.t}>
       <thead className={styles.thead}>

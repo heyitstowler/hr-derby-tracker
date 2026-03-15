@@ -1,33 +1,37 @@
 import Team from './Team'
-import {byHomeRuns, useSortable} from './useSortable'
+import { byHomeRuns, useSortable } from './useSortable'
 import styles from './SortableTable.module.css'
 import { SortButton } from './SortableTable'
+import type { Teams, HRData, RosterEntry } from '../types'
 
-const format = (teams, stats) => {
+const format = (teams: Teams, stats: HRData) => {
   const ts = Object.keys(teams)
-  const map = {}
-  const rosters = {}
+  const map: Record<string, number> = {}
+  const rosters: Record<string, RosterEntry[]> = {}
 
   ts.forEach(t => {
     let total = 0
     rosters[t] = []
     teams[t].forEach(p => {
-      const pscore = parseInt(stats[p] || '0', 10)
+      const pscore = parseInt(String(stats[p] ?? '0'), 10)
       rosters[t].push([p, pscore])
-
       total += pscore
-    });
+    })
     map[t] = total
     rosters[t].sort(byHomeRuns)
   })
   return { teamScores: map, rosters }
 }
 
-export default function TeamsLists({ teams, stats }) {
-  const { teamScores, rosters } = format(teams, stats)
+interface TeamsListsProps {
+  teams: Teams
+  stats: HRData
+}
 
+export default function TeamsLists({ teams, stats }: TeamsListsProps) {
+  const { teamScores, rosters } = format(teams, stats)
   const { list, by, asc, setSort } = useSortable(teamScores)
-  return ( 
+  return (
     <section>
       <section className={styles.buttons}>
         <SortButton active={by === 'hrs' && !asc} sort={setSort} by="hrs" >Total (desc)</SortButton>
@@ -37,7 +41,7 @@ export default function TeamsLists({ teams, stats }) {
       </section>
       {
         list.map(([name, score]) => (
-          <Team key={name} name={name} score={score} roster={rosters[name]} />
+          <Team key={name} name={name} score={Number(score)} roster={rosters[name] ?? []} />
         ))
       }
     </section>

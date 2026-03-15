@@ -1,6 +1,10 @@
 import Link from 'next/link'
 
-export default function MonthList({ year }) {
+interface StaticMonthListProps {
+  year: number
+}
+
+export default function StaticMonthList({ year }: StaticMonthListProps) {
   const months = [
     'April',
     'May',
