@@ -9,6 +9,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { byHomeRuns } from '../../components/useSortable'
 import playersWithCosts2022 from '../../constants/playersWithCosts'
 import playersWithCosts2023 from '../../constants/playersWithCosts2023'
+import playersWithCosts2026 from '../../constants/playersWithCosts2026'
 import { getHomeRunData } from './baseball'
 import type { OptimalTeam, PlayerWithCost, RosterEntry } from '../../types'
 
@@ -24,7 +25,9 @@ interface KnapsackParams {
 }
 
 async function fetchAllPlayerData({ month, year }: { month?: string; year: number }): Promise<PlayerData[]> {
-  const playersWithCosts: PlayerWithCost[] = year === 2023
+  const playersWithCosts: PlayerWithCost[] = year === 2026
+    ? playersWithCosts2026
+    : year === 2023
     ? playersWithCosts2023
     : playersWithCosts2022
   const players = playersWithCosts.map(p => p.Name)
@@ -38,7 +41,7 @@ async function fetchAllPlayerData({ month, year }: { month?: string; year: numbe
 }
 
 export async function fetchOptimalTeam({ month, year }: { month?: string; year: number }): Promise<OptimalTeam> {
-  const budget = year === 2023 ? 153 : 161
+  const budget = year === 2026 ? 153 : 161
   const players = await fetchAllPlayerData({ month, year })
   try {
     return knapsack({ players, budget })

@@ -23,7 +23,7 @@ export default function Layout({ children, year, title = 'Home Run Derby' }: Lay
         <YearsLinks />
       </header>
       {
-        year === 2023
+        year === 2023 || year === 2026
         ? <MonthList year={year}/>
         : <StaticMonthList year={year}/>
       }

@@ -10,8 +10,11 @@ export default function YearsLinks() {
       <Link legacyBehavior href="/2022">
         <a>2022</a>
       </Link>
-      <Link legacyBehavior href="/">
+      <Link legacyBehavior href="/2023">
         <a>2023</a>
+      </Link>
+      <Link legacyBehavior href="/">
+        <a>2026</a>
       </Link>
     </div>
   )

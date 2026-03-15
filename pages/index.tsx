@@ -1,6 +1,6 @@
 import Layout from '../components/Layout'
 import Stats from '../components/Stats'
-import TEAMS from '../constants/teams-2023'
+import TEAMS from '../constants/teams-2026'
 import { getHomeRunData } from './api/baseball'
 import { fetchOptimalTeam } from './api/knapsack'
 import type { GetServerSideProps } from 'next'
