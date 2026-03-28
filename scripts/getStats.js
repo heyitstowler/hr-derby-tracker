@@ -1,5 +1,4 @@
 const $ = require('cheerio').default
-console.log({ $ })
 const ints = {
   april: 4,
   may: 5,
@@ -51,7 +50,7 @@ async function getHomeRunData({ players, year }) {
     row => row.children.filter(el => el && el.name === 'td')
   )
   if (!rows) {
-    console.log('ruh roh')
+    console.error('ruh roh')
   }
 
   const playerRows = rows.filter(row => {

@@ -34,7 +34,6 @@ export function formatTableData(hrData: HRData, draftData?: Record<string, Draft
   }))
   return playerList.reduce(((data, { name, hrs }) => {
     if (!draftData || !draftData[name]) {
-      console.log({name})
       data[name] = {
         name,
         hrs,
