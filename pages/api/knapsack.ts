@@ -134,7 +134,7 @@ function knapsack({ budget, players }: KnapsackParams): OptimalTeam {
   if (optimal.score !== maxHRs) throw new Error("Score doesn't match!")
   if (totalCost > budget) throw new Error('Total cost exceeds budget!')
 
-  optimal.roster = optimal.roster.sort(byHomeRuns)
+  optimal.roster = optimal.roster.sort(byHomeRuns as (a: RosterEntry, b: RosterEntry) => number)
   return optimal
 }
 

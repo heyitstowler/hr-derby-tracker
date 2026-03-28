@@ -2,6 +2,7 @@ import Layout from '../../components/Layout'
 import Stats from '../../components/Stats'
 import { getHomeRunData } from '../api/baseball'
 import TEAMS from '../../constants/teams-2026'
+import draftData2026, { TOTAL_TEAMS_2026 } from '../../constants/draftData2026'
 import { fetchOptimalTeam } from '../api/knapsack'
 import type { GetStaticPaths, GetStaticProps } from 'next'
 import type { HRData, OptimalTeam } from '../../types'
@@ -15,7 +16,7 @@ interface MonthProps {
 export default function Month({ hrs, month, optimal }: MonthProps) {
   return (
     <Layout year={2026} title={"Home Run Derby - " + month}>
-      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} />
+      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} draftData={draftData2026} totalTeams={TOTAL_TEAMS_2026} />
     </Layout>
   )
 }

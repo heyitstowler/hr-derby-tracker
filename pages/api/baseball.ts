@@ -77,7 +77,7 @@ export async function getHomeRunData({ month, year, players: override }: GetHome
   })
 
   const map: HRData = data.reduce((accum: HRData, { name, hrs }) => {
-    accum[name] = hrs
+    accum[name] = parseInt(hrs, 10)
     return accum
   }, {})
 

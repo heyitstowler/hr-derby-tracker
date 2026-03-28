@@ -1,0 +1,17 @@
+.header {
+  width: 350px;
+  margin: 0 auto 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 3px solid black;
+  padding: 5px 10px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.col {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

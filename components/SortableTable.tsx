@@ -1,49 +1,48 @@
-import { type ReactNode, type Dispatch, type SetStateAction } from 'react'
+import { useMemo } from 'react'
 import { useSortable } from './useSortable'
-import styles from './SortableTable.module.css'
 import Table from './Table'
+import type { CombinedData } from '../types'
 
 interface SortableTableProps {
   className?: string
   headings: string[]
-  data: Record<string, string | number>
+  data: CombinedData
+  totalTeams?: number
 }
 
-interface SortButtonProps {
-  children: ReactNode
-  sort: Dispatch<SetStateAction<{ by: string; asc: boolean }>>
-  by: string
-  asc?: boolean
-  active: boolean
+const headingToSortKey: Record<string, string> = {
+  'Player': 'a-z',
+  'HRs': 'hrs',
+  'Pks': 'picks',
+  'RV': 'value',
 }
 
-export default function SortableTable({ className = '', headings, data }: SortableTableProps) {
-  const { list: hrList, by, asc, setSort } = useSortable(data)
+export default function SortableTable({ className = '', headings, data, totalTeams }: SortableTableProps) {
+  const { list, by, asc, setSort } = useSortable(data)
+
+  const hasDraft = Object.values(data).some(p => p.picks != null)
+
+  const tableData = useMemo(() =>
+    list.map(p => {
+      if (!hasDraft) return [p.name, p.hrs]
+      const picks = p.picks || '0'
+      const value = p.value != null ? p.value.toFixed(2) : '—'
+      return [p.name, p.hrs, picks, value]
+    }),
+    [list, hasDraft, totalTeams]
+  )
+
+  const sortKeys = headings.map(h => headingToSortKey[h] ?? null)
+
   return (
     <section className={className}>
-      <section className={styles.buttons}>
-        <SortButton active={by === 'hrs' && !asc} sort={setSort} by="hrs" >HRs (desc)</SortButton>
-        <SortButton active={by === 'hrs' && asc} sort={setSort} by="hrs" asc>HRs (asc)</SortButton>
-        <SortButton active={by === 'a-z' && !asc} sort={setSort} by="a-z">A - Z</SortButton>
-        <SortButton active={by === 'a-z' && asc} sort={setSort} by="a-z" asc>Z - A</SortButton>
-      </section>
       <Table
         headings={headings}
-        data={hrList}
+        data={tableData}
+        sortKeys={sortKeys}
+        sort={{ by, asc }}
+        onSort={(sortBy, sortAsc) => setSort({ by: sortBy, asc: sortAsc })}
       />
     </section>
-  )
-}
-
-export function SortButton({ children, sort, by, asc = false, active }: SortButtonProps) {
-  const getSort = (by: string, asc = false) => () => sort({ by, asc })
-
-  return (
-    <button
-      className={`${styles['sort-button']} ${active ? styles.active : ''}`}
-      onClick={getSort(by, asc)}
-      >
-        {children}
-    </button>
   )
 }

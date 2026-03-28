@@ -5,6 +5,7 @@ import { getHomeRunData } from './api/baseball'
 import { fetchOptimalTeam } from './api/knapsack'
 import type { GetServerSideProps } from 'next'
 import type { HRData, OptimalTeam } from '../types'
+import draftData2026 from '../constants/draftData2026'
 
 const year = new Date().getFullYear()
 
@@ -16,7 +17,7 @@ interface HomeProps {
 export default function Home({ hrs, optimal }: HomeProps) {
   return (
     <Layout year={year}>
-      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} />
+      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} draftData={draftData2026}/>
     </Layout>
   )
 }

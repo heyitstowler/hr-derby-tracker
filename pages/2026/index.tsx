@@ -2,6 +2,7 @@ import Layout from '../../components/Layout'
 import Stats from '../../components/Stats'
 import { getHomeRunData } from '../api/baseball'
 import TEAMS from '../../constants/teams-2026'
+import draftData2026, { TOTAL_TEAMS_2026 } from '../../constants/draftData2026'
 import { fetchOptimalTeam } from '../api/knapsack'
 import type { GetStaticProps } from 'next'
 import type { HRData, OptimalTeam } from '../../types'
@@ -14,7 +15,7 @@ interface HomeProps {
 export default function Home({ hrs, optimal }: HomeProps) {
   return (
     <Layout year={2026}>
-      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} />
+      <Stats hrs={hrs} teams={TEAMS} optimal={optimal} draftData={draftData2026} totalTeams={TOTAL_TEAMS_2026} />
     </Layout>
   )
 }

@@ -1,5 +1,5 @@
 .t {
-  width: 300px;
+  width: 350px;
   margin: auto;
   border-spacing: 0;
   border-collapse: collapse;
@@ -23,4 +23,30 @@
 .tr td {
   padding: 5px 10px;
   border: 1px solid black;
+}
+
+.th {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arrows {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.6em;
+  line-height: 1.2;
+  color: #bbb;
+}
+
+.arrowActive {
+  color: #000;
 }
