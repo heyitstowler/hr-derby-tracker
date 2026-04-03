@@ -41,7 +41,7 @@ const MARCH_DATES: Record<number, string> = {
   2026: '25'
 }
 
-const getStartDate = ({ month, year }: { month: int; year: number }): string => {
+const getStartDate = ({ month, year }: { month: number; year: number }): string => {
   if (month === 4) {
     const marchDate = MARCH_DATES[year] || '25'
     return `${year}-03-${marchDate}`
