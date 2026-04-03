@@ -36,6 +36,19 @@ const getEndDate = ({ year = 2021, monthInt, endOfMonth }: { year?: number; mont
   return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '01' : endOfMonth}`
 }
 
+const MARCH_DATES: Record<number, string> = {
+  2023: '30',
+  2026: '25'
+}
+
+const getStartDate = ({ month, year }: { month: int; year: number }): string => {
+  if (month === 4) {
+    const marchDate = MARCH_DATES[year] || '25'
+    return `${year}-03-${marchDate}`
+  }
+  return `${year}-0${month}-01`
+}
+
 const getUrl = ({ month, year }: { month?: string; year: number }): string => {
   if (!month) {
     return `https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
@@ -43,9 +56,7 @@ const getUrl = ({ month, year }: { month?: string; year: number }): string => {
 
   const int = ints[month]
   const endOfMonth = max[month]
-  const startDate = year === 2023 && int === 4
-    ? `${year}-03-30`
-    : `${year}-0${int}-01`
+  const startDate = getStartDate({ month: int, year })
   const endDate = getEndDate({ year, monthInt: int, endOfMonth })
   return fmt(startDate, endDate, year)
 }
