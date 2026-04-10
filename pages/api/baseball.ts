@@ -1,4 +1,3 @@
-import * as cheerio from 'cheerio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import PLAYERS from '../../constants/players'
 import type { HRData } from '../../types'
@@ -23,15 +22,15 @@ const max: Record<string, number> = {
   october: 3,
 }
 
-const fmt = (s = '', e = '', y: string | number = '') =>
-  `https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${y}&month=1000&season1=${y}&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
-
 const getEndDate = ({ year = 2021, monthInt, endOfMonth }: { year?: number; monthInt: number; endOfMonth: number }): string => {
   if (year === 2021) {
     return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '03' : endOfMonth}`
   }
   else if (year === 2022) {
     return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '04' : endOfMonth}`
+  }
+  else if (year === 2023) {
+    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '01' : endOfMonth}`
   }
   return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '01' : endOfMonth}`
 }
@@ -49,16 +48,18 @@ const getStartDate = ({ month, year }: { month: number; year: number }): string 
   return `${year}-0${month}-01`
 }
 
+const BASE = 'https://statsapi.mlb.com/api/v1/stats'
+
 const getUrl = ({ month, year }: { month?: string; year: number }): string => {
   if (!month) {
-    return `https://www.fangraphs.com/leaders-legacy.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
+    return `${BASE}?stats=season&group=hitting&season=${year}&playerPool=All&limit=600&sortStat=homeRuns`
   }
 
   const int = ints[month]
   const endOfMonth = max[month]
   const startDate = getStartDate({ month: int, year })
   const endDate = getEndDate({ year, monthInt: int, endOfMonth })
-  return fmt(startDate, endDate, year)
+  return `${BASE}?stats=byDateRange&group=hitting&startDate=${startDate}&endDate=${endDate}&season=${year}&playerPool=All&limit=600&sortStat=homeRuns`
 }
 
 interface GetHomeRunDataParams {
@@ -67,33 +68,31 @@ interface GetHomeRunDataParams {
   players?: string[]
 }
 
+const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+
 export async function getHomeRunData({ month, year, players: override }: GetHomeRunDataParams): Promise<HRData> {
   const players: string[] = override ?? PLAYERS[year] ?? PLAYERS.default
   const url = getUrl({ month, year })
-  const html = await fetch(url, { headers: { mode: 'no-cors' } })
-    .then(r => r.text())
+  console.log({ url })
 
-  const $ = cheerio.load(html)
-  const rows = $('.rgMasterTable tbody tr').toArray()
+  const json = await fetch(url).then(r => r.json())
+  const splits: { player: { fullName: string }; stat: { homeRuns: number } }[] = json?.stats?.[0]?.splits ?? []
 
-  const playerRows = rows.filter(row => {
-    const name = $(row).find('td').eq(1).find('a').text()
-    return players.includes(name)
+  // Build a normalized lookup so accent differences (e.g. "José Ramírez" vs "Jose Ramirez") still match
+  const normalizedPlayers = new Map<string, string>(players.map(p => [normalize(p), p]))
+
+  const map: HRData = {}
+  splits.forEach(split => {
+    const apiName = split?.player?.fullName
+    if (!apiName) return
+    const playerName = normalizedPlayers.get(normalize(apiName))
+    if (playerName) {
+      map[playerName] = split.stat.homeRuns ?? 0
+    }
   })
-
-  const data = playerRows.map(row => {
-    const name = $(row).find('td').eq(1).find('a').text()
-    const hrs = $(row).find('td').eq(5).text()
-    return { name, hrs }
-  })
-
-  const map: HRData = data.reduce((accum: HRData, { name, hrs }) => {
-    accum[name] = parseInt(hrs, 10)
-    return accum
-  }, {})
 
   players.forEach(p => {
-    if (!map[p]) {
+    if (map[p] === undefined) {
       map[p] = 0
     }
   })

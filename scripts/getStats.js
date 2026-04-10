@@ -1,4 +1,3 @@
-const $ = require('cheerio').default
 const ints = {
   april: 4,
   may: 5,
@@ -19,61 +18,73 @@ const max = {
   october: 3,
 }
 
-const fmt = (s = '', e = '') => `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2021&month=1000&season1=2021&ind=0&team=&rost=&age=&filter=&players=&startdate=${s}&enddate=${e}&page=1_1500`
+const MARCH_DATES = {
+  2023: '30',
+  2026: '25',
+}
 
 const getEndDate = ({ year = 2021, monthInt, endOfMonth }) => {
   if (year === 2021) {
-    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '03' : endOfMonth }`
+    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '03' : endOfMonth}`
+  } else if (year === 2022) {
+    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '04' : endOfMonth}`
+  } else if (year === 2023) {
+    return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '01' : endOfMonth}`
   }
-  return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '04' : endOfMonth }`
+  return `${year}-${monthInt >= 9 ? 10 : '0' + monthInt}-${monthInt >= 9 ? '01' : endOfMonth}`
 }
+
+const getStartDate = ({ month, year }) => {
+  if (month === 4) {
+    const marchDate = MARCH_DATES[year] || '25'
+    return `${year}-03-${marchDate}`
+  }
+  return `${year}-0${month}-01`
+}
+
+const BASE = 'https://statsapi.mlb.com/api/v1/stats'
 
 const getUrl = ({ month, year }) => {
   if (!month) {
-    return `https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=${year}&month=0&season1=${year}&ind=0&team=&rost=&age=&filter=&players=&startdate=$&enddate=&page=1_1500`
+    return `${BASE}?stats=season&group=hitting&season=${year}&playerPool=All&limit=600&sortStat=homeRuns`
   }
 
   const int = ints[month]
   const endOfMonth = max[month]
-
-  const startDate = `${year}-0${int}-01`
+  const startDate = getStartDate({ month: int, year })
   const endDate = getEndDate({ year, monthInt: int, endOfMonth })
-  const url = fmt(startDate, endDate)
-  return url
+  return `${BASE}?stats=byDateRange&group=hitting&startDate=${startDate}&endDate=${endDate}&season=${year}&playerPool=All&limit=600&sortStat=homeRuns`
 }
 
-async function getHomeRunData({ players, year }) {
-  const url = getUrl({ year })
-  const html = await fetch(url)
-    .then(r => r.text())
-  const rows = Array.from($('.rgMasterTable tbody tr', html)).map(
-    row => row.children.filter(el => el && el.name === 'td')
-  )
-  if (!rows) {
-    console.error('ruh roh')
-  }
+const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 
-  const playerRows = rows.filter(row => {
-    const name = row[1]?.children?.[0]?.children?.[0]?.data
-    return players.includes(name)
+async function getHomeRunData({ players, year, month }) {
+  const url = getUrl({ month, year })
+  console.log({ url })
+
+  const json = await fetch(url).then(r => r.json())
+  const splits = json?.stats?.[0]?.splits ?? []
+
+  const normalizedPlayers = new Map(players.map(p => [normalize(p), p]))
+
+  const map = {}
+  splits.forEach(split => {
+    const apiName = split?.player?.fullName
+    if (!apiName) return
+    const playerName = normalizedPlayers.get(normalize(apiName))
+    if (playerName) {
+      map[playerName] = split.stat.homeRuns ?? 0
+    }
   })
-  const data = playerRows.map(row => {
-    const name = row[1]?.children?.[0]?.children?.[0]?.data
-    const hrs = row[5]?.children?.[0]?.data
-    return { name, hrs }
-  })
-  const map = data.reduce((accum, { name, hrs }) => {
-    accum[name] = hrs
-    return accum
-  }, {})
+
   players.forEach(p => {
-    if (!map[p]) {
+    if (map[p] === undefined) {
       map[p] = 0
     }
   })
   return map
 }
 
-module.exports = function(players) {
-  return getHomeRunData({ players, year: '2021'})
+module.exports = function(players, year = '2021', month) {
+  return getHomeRunData({ players, year, month })
 }
