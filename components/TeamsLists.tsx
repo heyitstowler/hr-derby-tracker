@@ -49,7 +49,7 @@ export default function TeamsLists({ teams, stats, draftData }: TeamsListsProps)
 
   const maxScore = Math.max(...Object.values(teamScores))
   const firstPlaceNames: Record<string, string> = {
-    'Dave Trompeter': "Dave 'Cheated' Trompeter",
+    'Dave Trompeter': "Dave 'Definitely Not Cheating' Trompeter",
     'Kevin Towler': 'Capt. Kevin of the 4th Astro Alliance',
     'Collin Stiles': "Collin 'Read Good' Stiles",
     'Dan Pasacrita': "Dan 'The Man' Pasacrita",
