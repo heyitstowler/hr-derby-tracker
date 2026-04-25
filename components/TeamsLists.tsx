@@ -47,6 +47,28 @@ export default function TeamsLists({ teams, stats, draftData }: TeamsListsProps)
     </button>
   )
 
+  const maxScore = Math.max(...Object.values(teamScores))
+  const firstPlaceNames: Record<string, string> = {
+    'Dave Trompeter': "Dave 'Cheated' Trompeter",
+    'Kevin Towler': 'Capt. Kevin of the 4th Astro Alliance',
+    'Collin Stiles': "Collin 'Read Good' Stiles",
+    'Dan Pasacrita': "Dan 'The Man' Pasacrita",
+    'Chris Towler': 'nnngggGGEEET WREEECKKKEEEDD',
+    'Keith McLoat Jr.': 'Keith McGOAT Jr.',
+    'Harrison Uzwy': "Harrison 'No Hands' Uzwy",
+    'Pedy': 'Pedy the MEATY',
+    'Stephen Burns': "Stephen 'Boo-urns' Burns",
+  }
+
+  const displayName = (name: string) => {
+    if (teamScores[name] === maxScore) {
+      for (const [key, val] of Object.entries(firstPlaceNames)) {
+        if (name.startsWith(key)) return name.replace(key, val)
+      }
+    }
+    return name
+  }
+
   return (
     <section>
       <div className={styles.header}>
@@ -60,7 +82,7 @@ export default function TeamsLists({ teams, stats, draftData }: TeamsListsProps)
         </span>
       </div>
       {list.map(([name, score]) => (
-        <Team key={name} name={name} score={Number(score)} roster={rosters[name] ?? []} />
+        <Team key={name} name={displayName(name)} score={Number(score)} roster={rosters[name] ?? []} />
       ))}
     </section>
   )
