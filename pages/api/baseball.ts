@@ -70,13 +70,18 @@ interface GetHomeRunDataParams {
 
 const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 
+// For players who share a name with another MLB player, specify which team's player we want
+const PLAYER_TEAM_OVERRIDES: Record<string, string> = {
+  'max muncy': 'Los Angeles Dodgers',
+}
+
 export async function getHomeRunData({ month, year, players: override }: GetHomeRunDataParams): Promise<HRData> {
   const players: string[] = override ?? PLAYERS[year] ?? PLAYERS.default
   const url = getUrl({ month, year })
   console.log({ url })
 
   const json = await fetch(url).then(r => r.json())
-  const splits: { player: { fullName: string }; stat: { homeRuns: number } }[] = json?.stats?.[0]?.splits ?? []
+  const splits: { player: { fullName: string }; team?: { name: string }; stat: { homeRuns: number } }[] = json?.stats?.[0]?.splits ?? []
 
   // Build a normalized lookup so accent differences (e.g. "José Ramírez" vs "Jose Ramirez") still match
   const normalizedPlayers = new Map<string, string>(players.map(p => [normalize(p), p]))
@@ -85,8 +90,11 @@ export async function getHomeRunData({ month, year, players: override }: GetHome
   splits.forEach(split => {
     const apiName = split?.player?.fullName
     if (!apiName) return
-    const playerName = normalizedPlayers.get(normalize(apiName))
+    const normalizedName = normalize(apiName)
+    const playerName = normalizedPlayers.get(normalizedName)
     if (playerName) {
+      const requiredTeam = PLAYER_TEAM_OVERRIDES[normalizedName]
+      if (requiredTeam && split.team?.name !== requiredTeam) return
       map[playerName] = split.stat.homeRuns ?? 0
     }
   })
