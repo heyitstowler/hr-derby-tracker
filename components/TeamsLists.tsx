@@ -61,7 +61,7 @@ export default function TeamsLists({ teams, stats, draftData }: TeamsListsProps)
   }
 
   const displayName = (name: string) => {
-    if (teamScores[name] === maxScore) {
+    if (teamScores[name] === maxScore && maxScore !== 0) {
       for (const [key, val] of Object.entries(firstPlaceNames)) {
         if (name.startsWith(key)) return name.replace(key, val)
       }
